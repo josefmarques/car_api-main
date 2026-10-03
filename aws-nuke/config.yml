@@ -1,0 +1,50 @@
+regions:
+  - global
+  - us-east-1
+
+resource-types:
+  includes:
+    - ECR*
+    - ELB*
+    - EC2Instance
+    - EC2SecurityGroup
+    - RDS*
+    - SSMParameter*
+
+settings:
+  EC2Image:
+    IncludeDisabled: true
+    IncludeDeprecated: true
+    DisableDeregistrationProtection: true
+  EC2Instance:
+    DisableStopProtection: true
+    DisableDeletionProtection: true
+  RDSInstance:
+    DisableDeletionProtection: true
+
+presets:
+  defaults:
+    filters:
+      EC2Subnet:
+        - property: DefaultVPC
+          value: "true"
+      EC2DefaultSecurityGroupRule:
+        - property: DefaultVPC
+          value: "true"
+      EC2DHCPOption:
+        - property: DefaultVPC
+          value: "true"
+      EC2VPC:
+        - property: IsDefault
+          value: "true"
+      EC2InternetGateway:
+        - property: DefaultVPC
+          value: "true"
+      EC2InternetGatewayAttachment:
+        - property: DefaultVPC
+          value: "true"
+
+blocklist: [""]
+
+accounts:
+  "763136696157": {}

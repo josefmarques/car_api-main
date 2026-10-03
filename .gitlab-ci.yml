@@ -1,0 +1,134 @@
+stages:
+  - test
+  - build
+  - package
+  - deploy
+
+variables:
+  ECR_REGISTRY: 763136696157.dkr.ecr.us-east-1.amazonaws.com
+
+python:test:
+  artifacts:
+    paths:
+      - htmlcov/
+    expire_in: 1 hour
+  stage: test
+  image: python:3.13.9-alpine3.22
+  before_script:
+    - apk add curl gcc python3-dev musl-dev linux-headers
+    - curl -sSL https://install.python-poetry.org | python3 -
+    - export PATH="/root/.local/bin:$PATH"
+    - poetry --version
+    - poetry install
+    - mv .env.example .env
+  script:
+    - poetry run task test
+  variables:
+    POETRY_VERSION: "2.2.1"
+
+.oidc:auth:
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  before_script:
+    - apk add aws-cli
+    - |
+      aws_sts_output=$(aws sts assume-role-with-web-identity \
+        --role-arn ${ROLE_ARN} \
+        --role-session-name "GitLabRunner-${CI_PROJECT_ID}-${CI_PIPELINE_ID}" \
+        --web-identity-token ${GITLAB_OIDC_TOKEN} \
+        --duration-seconds 3600 \
+        --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+        --output text)
+    - export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $aws_sts_output)
+    - aws sts get-caller-identity --no-cli-pager
+  variables:
+    ROLE_ARN: arn:aws:iam::763136696157:role/ci/GitLabCIOIDC-pycodebr-car-api-main
+
+.docker:build:
+  extends: .oidc:auth
+  stage: build
+  image: docker:29.1.3-cli
+  script:
+    - docker info
+    - |
+      docker buildx create \
+        --platform linux/amd64,linux/arm64 \
+        --bootstrap \
+        --use
+    - |
+      aws ecr get-login-password \
+        --region us-east-1 | \
+          docker login \
+            --username AWS \
+            --password-stdin ${ECR_REGISTRY}
+    - VERSION=$(grep "^version" $(pwd)/pyproject.toml | cut -d = -f 2 | tr -d ' "')
+    - |
+      docker buildx build \
+        --platform linux/amd64,linux/arm64 \
+        --tag ${ECR_REGISTRY}/${ECR_REPOSITORY}:${VERSION} \
+        --file ${DOCKERFILE} \
+        --push .
+  services:
+    - name: docker:29.1.3-dind
+      alias: docker
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+
+docker:build:car-api:
+  extends: .docker:build
+  variables:
+    DOCKERFILE: Dockerfile
+    ECR_REPOSITORY: car-api
+
+docker:build:car-api-mkdocs:
+  extends: .docker:build
+  variables:
+    DOCKERFILE: Dockerfile.mkdocs
+    ECR_REPOSITORY: car-api-mkdocs
+
+helm:package:
+  extends: .oidc:auth
+  stage: package
+  image:
+    name: alpine/helm:4.0.0
+    entrypoint: [""]
+  script:
+    - |
+      aws ecr get-login-password \
+        --region us-east-1 | \
+          helm registry login \
+            --username AWS \
+            --password-stdin ${ECR_REGISTRY}
+    - helm dependency update ${HELM_PATH}
+    - helm package ${HELM_PATH}
+    - VERSION=$(grep "^version" ${HELM_PATH}/Chart.yaml | cut -d ":" -f 2 | tr -d " ")
+    - helm push car-api-${VERSION}.tgz oci://${ECR_REGISTRY}
+  variables:
+    HELM_PATH: kubernetes/charts/car-api
+
+flux:deploy:
+  stage: deploy
+  image:
+    name: alpine/git:v2.52.0
+    entrypoint: [""]
+  before_script:
+    - git config --global user.email "gitlab@mateusmuller.me"
+    - git config --global user.name "GitLab CI"
+    - git clone https://git:${GITLAB_TOKEN}@gitlab.com/pycodebr/gitops.git
+  script:
+    - |
+      APP_VERSION=$(grep "^version" $(pwd)/pyproject.toml | cut -d = -f 2 | tr -d ' "')
+      HELM_CHART_VERSION=$(grep "^version" ${HELM_PATH}/Chart.yaml | cut -d ":" -f 2 | tr -d " ")
+    - cd gitops
+    - |
+      sed -i "s/tag: .*/tag: ${APP_VERSION}/g" ${HELMRELEASE_PATH}
+      sed -i "s/version: .*/version: ${HELM_CHART_VERSION}/g" ${HELMRELEASE_PATH}
+    - cat ${HELMRELEASE_PATH}
+    - git add ${HELMRELEASE_PATH}
+    - |
+      git commit -m "[DEPLOY] App Version: ${APP_VERSION} | Helm Chart Version: ${HELM_CHART_VERSION}"
+      git push origin main
+  variables:
+    HELM_PATH: kubernetes/charts/car-api
+    HELMRELEASE_PATH: clusters/pycodebr-eks/pycodebr/car-api/helmrelease.yaml

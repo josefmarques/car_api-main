@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-api
+  namespace: pycodebr
+  labels:
+    app: car-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: car-api
+  template:
+    metadata:
+      labels:
+        app: car-api
+    spec:
+      containers:
+      - name: car-api
+        image: car-api:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: car-api-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: car-api
+  namespace: pycodebr
+spec:
+  selector:
+    app: car-api
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: car-api-ingress
+  namespace: pycodebr
+spec:
+  ingressClassName: kong
+  rules:
+  - host: car-api.localhost.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: car-api
+            port:
+              number: 8000

@@ -1,0 +1,16 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: car-api
+build:
+  artifacts:
+    - image: car-api
+      docker:
+        dockerfile: Dockerfile
+    - image: car-api-mkdocs
+      docker:
+        dockerfile: Dockerfile.mkdocs
+manifests:
+  rawYaml:
+    - kubernetes/local/car-api-mkdocs.yaml
+    - kubernetes/local/car-api.yaml

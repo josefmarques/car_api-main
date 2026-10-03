@@ -1,0 +1,21 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alembic-migrations
+  namespace: pycodebr
+spec:
+  template:
+    spec:
+      containers:
+      - name: alembic-migrations
+        image: car-api:1.0.0
+        command:
+        - /bin/sh
+        - -c
+        - |
+          poetry run alembic upgrade head
+        envFrom:
+        - secretRef:
+            name: car-api-secret
+      restartPolicy: Never

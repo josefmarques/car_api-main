@@ -1,0 +1,11 @@
+{{- if not .Values.local.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    {{- include "car-api.labels" . | nindent 4 }}
+spec:
+  type: ExternalName
+  externalName: {{ .Values.rdsEndpoint }}
+{{- end }}
