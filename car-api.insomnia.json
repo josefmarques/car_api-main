@@ -1,0 +1,926 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_car_api",
+      "parentId": null,
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "car-api",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "fld_pycodebr",
+      "parentId": "wrk_car_api",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "pycodebr",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -600000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_health",
+      "parentId": "fld_pycodebr",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Health",
+      "description": "Health check",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -500000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "fld_pycodebr",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Auth",
+      "description": "Autenticação",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -499900,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_users",
+      "parentId": "fld_pycodebr",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Users",
+      "description": "Usuários",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -499800,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_brands",
+      "parentId": "fld_pycodebr",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Brands",
+      "description": "Marcas",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -499700,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_cars",
+      "parentId": "fld_pycodebr",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Cars",
+      "description": "Carros",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -499600,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_sales",
+      "parentId": "fld_pycodebr",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Sales",
+      "description": "Vendas (inferido)",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -499500,
+      "_type": "request_group"
+    },
+    {
+      "_id": "env_car_api",
+      "parentId": "wrk_car_api",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8000",
+        "access_token": "",
+        "user_id": 1,
+        "brand_id": 1,
+        "car_id": 1,
+        "sale_id": 1
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "access_token",
+          "user_id",
+          "brand_id",
+          "car_id",
+          "sale_id"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1,
+      "_type": "environment"
+    },
+    {
+      "_id": "req_health_check",
+      "parentId": "fld_health",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/health_check",
+      "name": "Health check",
+      "description": "Verifica o status da API. Retorna {\"status\": \"ok pycodebr!\"}.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -100000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_token",
+      "parentId": "fld_auth",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/auth/token",
+      "name": "Gerar token de acesso",
+      "description": "Login via email/senha. Copie o access_token retornado para a variável access_token do environment.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"secret123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_refresh",
+      "parentId": "fld_auth",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/auth/refresh_token",
+      "name": "Atualizar token de acesso",
+      "description": "Requer Bearer token. Gera um novo access_token a partir do usuário autenticado.",
+      "method": "POST",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_create",
+      "parentId": "fld_users",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/users/",
+      "name": "Criar novo usuário",
+      "description": "Endpoint publico. Username >= 3 chars, senha >= 6 chars.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"johndoe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"secret123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_list",
+      "parentId": "fld_users",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/users/",
+      "name": "Listar usuários",
+      "description": "Endpoint publico.",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "offset",
+          "value": "0",
+          "description": "Registros para pular",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "100",
+          "description": "Limite (1-100)",
+          "disabled": false
+        },
+        {
+          "name": "search",
+          "value": "",
+          "description": "Buscar por username/email",
+          "disabled": true
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -99600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_get",
+      "parentId": "fld_users",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/users/{{ _.user_id }}",
+      "name": "Buscar usuário por ID",
+      "description": "Endpoint publico.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -99500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_update",
+      "parentId": "fld_users",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/users/{{ _.user_id }}",
+      "name": "Atualizar usuário",
+      "description": "A API implementa PUT (PATCH retorna 405). Requer Bearer token.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"johndoe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"newsecret123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_delete",
+      "parentId": "fld_users",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/users/{{ _.user_id }}",
+      "name": "Deletar usuário",
+      "description": "Requer Bearer token. Retorna 204.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_brands_create",
+      "parentId": "fld_brands",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/brands/",
+      "name": "Criar nova marca",
+      "description": "Requer Bearer token. Nome >= 2 chars.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Toyota\",\n  \"description\": \"Marca japonesa\",\n  \"is_active\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_brands_list",
+      "parentId": "fld_brands",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/brands/",
+      "name": "Listar marcas",
+      "description": "Requer Bearer token.",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "offset",
+          "value": "0",
+          "description": "Registros para pular",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "100",
+          "description": "Limite (1-100)",
+          "disabled": false
+        },
+        {
+          "name": "search",
+          "value": "",
+          "description": "Buscar por nome",
+          "disabled": true
+        },
+        {
+          "name": "is_active",
+          "value": "",
+          "description": "Filtrar ativas",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_brands_get",
+      "parentId": "fld_brands",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/brands/{{ _.brand_id }}",
+      "name": "Buscar marca por ID",
+      "description": "Requer Bearer token.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -99000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_brands_update",
+      "parentId": "fld_brands",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/brands/{{ _.brand_id }}",
+      "name": "Atualizar marca",
+      "description": "A API implementa PUT. Requer Bearer token.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Toyota\",\n  \"description\": \"Marca japonesa atualizada\",\n  \"is_active\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_brands_delete",
+      "parentId": "fld_brands",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/brands/{{ _.brand_id }}",
+      "name": "Deletar marca",
+      "description": "Requer Bearer token. Falha (400) se houver carros associados.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cars_create",
+      "parentId": "fld_cars",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/cars/",
+      "name": "Criar novo carro",
+      "description": "Requer Bearer token. fuel_type: gasoline|ethanol|flex|diesel|electric|hybrid. transmission: manual|automatic|semi_automatic|cvt.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"model\": \"Corolla\",\n  \"factory_year\": 2020,\n  \"model_year\": 2021,\n  \"color\": \"Prata\",\n  \"plate\": \"ABC1234\",\n  \"fuel_type\": \"flex\",\n  \"transmission\": \"automatic\",\n  \"price\": 95000.0,\n  \"description\": \"Carro em otimo estado\",\n  \"is_available\": true,\n  \"brand_id\": 1\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cars_list",
+      "parentId": "fld_cars",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/cars/",
+      "name": "Listar carros",
+      "description": "Requer Bearer token. Lista apenas carros do usuário autenticado.",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "offset",
+          "value": "0",
+          "description": "Registros para pular",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "100",
+          "description": "Limite (1-100)",
+          "disabled": false
+        },
+        {
+          "name": "search",
+          "value": "",
+          "description": "Buscar por modelo/placa",
+          "disabled": true
+        },
+        {
+          "name": "brand_id",
+          "value": "",
+          "description": "Filtrar por marca",
+          "disabled": true
+        },
+        {
+          "name": "fuel_type",
+          "value": "",
+          "description": "Filtrar por combustível",
+          "disabled": true
+        },
+        {
+          "name": "transmission",
+          "value": "",
+          "description": "Filtrar por transmissão",
+          "disabled": true
+        },
+        {
+          "name": "is_available",
+          "value": "",
+          "description": "Filtrar disponibilidade",
+          "disabled": true
+        },
+        {
+          "name": "min_price",
+          "value": "",
+          "description": "Preço mínimo",
+          "disabled": true
+        },
+        {
+          "name": "max_price",
+          "value": "",
+          "description": "Preço máximo",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cars_get",
+      "parentId": "fld_cars",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/cars/{{ _.car_id }}",
+      "name": "Buscar carro por ID",
+      "description": "Requer Bearer token e posse do carro.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cars_update",
+      "parentId": "fld_cars",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/cars/{{ _.car_id }}",
+      "name": "Atualizar carro",
+      "description": "A API implementa PUT. Requer Bearer token e posse do carro.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"model\": \"Corolla XEi\",\n  \"color\": \"Preto\",\n  \"price\": 89900.0,\n  \"is_available\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cars_delete",
+      "parentId": "fld_cars",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/cars/{{ _.car_id }}",
+      "name": "Deletar carro",
+      "description": "Requer Bearer token e posse do carro. Retorna 204.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_sales_create",
+      "parentId": "fld_sales",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/sales/",
+      "name": "Criar nova venda",
+      "description": "Endpoint não implementado no código-fonte (rotas inferidas).",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"car_id\": 1,\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"price\": 95000.0,\n  \"payment_method\": \"credit_card\",\n  \"status\": \"pending\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_sales_list",
+      "parentId": "fld_sales",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/sales/",
+      "name": "Listar vendas",
+      "description": "Endpoint não implementado no código-fonte (rotas inferidas).",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "offset",
+          "value": "0",
+          "description": "Registros para pular",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "100",
+          "description": "Limite (1-100)",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_sales_get",
+      "parentId": "fld_sales",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/sales/{{ _.sale_id }}",
+      "name": "Buscar venda por ID",
+      "description": "Endpoint não implementado no código-fonte (rotas inferidas).",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -98000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_sales_update",
+      "parentId": "fld_sales",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/sales/{{ _.sale_id }}",
+      "name": "Atualizar venda",
+      "description": "Endpoint não implementado no código-fonte (rotas inferidas).",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"payment_method\": \"pix\",\n  \"status\": \"paid\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -97900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_sales_delete",
+      "parentId": "fld_sales",
+      "modified": 1700000000000,
+      "created": 1700000000000,
+      "url": "{{ _.base_url }}/api/v1/sales/{{ _.sale_id }}",
+      "name": "Deletar venda",
+      "description": "Endpoint não implementado no código-fonte (rotas inferidas).",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -97800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    }
+  ]
+}

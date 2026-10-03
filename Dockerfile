@@ -6,8 +6,8 @@ ARG USERNAME=carapi
 ENV POETRY_VERSION=2.2.1 \
     PATH="/home/${USERNAME}/.local/bin:$PATH"
 
-RUN apk add curl=8.14.1-r2 \
-      --no-cache && \
+RUN apk add curl \
+    --no-cache && \
     rm -rf /var/cache/apk/* && \
     adduser -s /bin/sh -D ${USERNAME}
 

@@ -42,9 +42,9 @@ metadata:
   name: car-api-mkdocs-ingress
   namespace: pycodebr
 spec:
-  ingressClassName: kong
+  ingressClassName: traefik
   rules:
-  - host: car-api-mkdocs.localhost.com
+  - host: car-api-mkdocs.localhost
     http:
       paths:
       - path: /

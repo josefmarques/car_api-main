@@ -1,4 +1,4 @@
-local:
+local: 
   enabled: true
 
 postgresql:
@@ -6,9 +6,9 @@ postgresql:
     postgresPassword: postgres
   image:
     repository: bitnamilegacy/postgresql
-  primary:
-    networkPolicy:
-      enabled: false
+  # primary:
+  #   networkPolicy:
+  #     enabled: false
 
 # Default values for car-api.
 # This is a YAML-formatted file.
@@ -75,28 +75,12 @@ service:
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
-  className: kong
+  className: "traefik"
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: car-api.localhost.com
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-    # - secretName: chart-example-tls
-    #   hosts:
-    #     - chart-example.local
-
-ingressMkDocs:
-  enabled: true
-  className: kong
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: car-api-mkdocs.localhost.com
       paths:
         - path: /
           pathType: ImplementationSpecific

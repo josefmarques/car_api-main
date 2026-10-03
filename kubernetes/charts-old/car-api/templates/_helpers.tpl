@@ -43,10 +43,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels
+Selector labels car-api
 */}}
 {{- define "car-api.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "car-api.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Selector labels car-api-mkdocs
+*/}}
+{{- define "car-api-mkdocs.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "car-api.name" . }}-mkdocs
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
