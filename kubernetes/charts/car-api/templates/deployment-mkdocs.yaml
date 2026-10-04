@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "car-api.fullname" . }}-mkdocs
+  labels:
+    {{- include "car-api.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "car-api-mkdocs.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "car-api-mkdocs.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: car-api-mkdocs
+        image: "{{ .Values.image.repository }}-mkdocs:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---

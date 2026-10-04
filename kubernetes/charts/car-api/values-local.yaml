@@ -89,6 +89,20 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
+# -- Ingress do MkDocs
+# Necessário sobrescrever a classe: o cluster local usa Traefik,
+# enquanto o default do chart (values.yaml) é Kong para o EKS.
+ingressMkDocs:
+  enabled: true
+  className: "traefik"
+  annotations: {}
+  hosts:
+    - host: car-api-mkdocs.localhost.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
 # -- Expose the service via gateway-api HTTPRoute
 # Requires Gateway API resources and suitable controller installed within the cluster
 # (see: https://gateway-api.sigs.k8s.io/guides/)
